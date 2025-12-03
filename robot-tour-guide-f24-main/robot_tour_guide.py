@@ -13,7 +13,7 @@ from utils.robot import plan_to_pose, turn_to_theta
 from waypoint_writer import read_labels_and_waypoints
 
 # TODO: Update PATH_TO_MODEL.
-PATH_TO_MODEL = "model.joblib"
+PATH_TO_MODEL = "/home/mbot/Akshara-ROB102-Repository-P4/robot-tour-guide-f24-main/bin/model.joblib"
 
 robot = MBot()
 
@@ -72,6 +72,20 @@ def main():
   # the result to determine which waypoint to visit next. You will need to use the
   # "labels" and "waypoints" variables! When the robot reads a poster with label "0",
   # it should return to the start position (0, 0, 0) and the program should exit.
+
+  while (true):
+      frame = ch.get_processed_image(save=True)
+      y_pred = model.predict([frame])[0]
+      labelidx = 0
+
+
+      if frame == None:
+        continue
+      
+      plan_to_pose(x, y, robot)
+      turn_to_theta(theta, robot)
+      
+
   
 
 if __name__ == '__main__':
