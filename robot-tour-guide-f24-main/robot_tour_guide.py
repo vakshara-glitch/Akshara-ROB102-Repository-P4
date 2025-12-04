@@ -73,20 +73,23 @@ def main():
   # "labels" and "waypoints" variables! When the robot reads a poster with label "0",
   # it should return to the start position (0, 0, 0) and the program should exit.
 
-  while (true):
+  while (True):
       frame = ch.get_processed_image(save=True)
-      y_pred = model.predict([frame])[0]
-      labelidx = 0
-
 
       if frame == None:
         continue
-      
-      plan_to_pose(x, y, robot)
-      turn_to_theta(theta, robot)
-      
 
-  
+      y_pred = model.predict([frame])[0]
+      labelidx = labels.index(y_pred)
+
+      if y_pred == 0:
+         break   
+
+      plan_to_pose(waypoints[labelidx][0], waypoints[labelidx][1], robot)
+      turn_to_theta(waypoints[labelidx][2], robot)
+      print("Digit detected:", y_pred)
+
+      
 
 if __name__ == '__main__':
     main()
