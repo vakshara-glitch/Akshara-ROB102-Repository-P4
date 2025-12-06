@@ -20,13 +20,18 @@ class CameraHandler():
 
   def __init__(self):
     # Set camera configuration.
-    self.picam2 = Picamera2()
-    self.picam2.preview_configuration.main.size = (320,240)
-    self.picam2.preview_configuration.main.format = "RGB888"
-    self.picam2.preview_configuration.align()
-    self.picam2.preview_configuration.transform = Transform(vflip=True, hflip=True) 
-    self.picam2.configure("preview")
-    self.picam2.start()
+    try:
+      self.picam2 = Picamera2()
+      self.picam2.preview_configuration.main.size = (320,240)
+      self.picam2.preview_configuration.main.format = "RGB888"
+      self.picam2.preview_configuration.align()
+      self.picam2.preview_configuration.transform = Transform(vflip=True, hflip=True) 
+      self.picam2.configure("preview")
+      self.picam2.start()
+      sensor_size = self.picam2.camera_properties['PixelArraySize']
+      self.picam2.set_controls({"ScalerCrop": (0, 0, sensor_size[0], sensor_size[1])})
+    except (KeyError, AttributeError):
+      pass
 
     self.latest_img = None
     self.poster_cordinates = None
